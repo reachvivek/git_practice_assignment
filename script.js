@@ -1,8 +1,21 @@
 let nameInp = document.querySelector('#name')
 let email = document.querySelector('#email')
 let btn=document.querySelector('.btn')
-
 btn.addEventListener('click', submit)
+
+let arr = JSON.parse(localStorage.getItem('userDetails'))
+if (arr){
+    arr.map(item=>{
+        var li=document.createElement('li')
+        li.className='list-group-item'
+        var det=document.createTextNode(`${item.name} ${item.email}`)
+        li.append(det)
+        items=document.getElementById('users')    
+        items.appendChild(li)
+    })
+}
+
+
 function submit(){
     if (nameInp.value.length<3 || email.value.indexOf('@')==-1){
         alert("Enter valid input!")
@@ -10,42 +23,25 @@ function submit(){
     else{
         alert("Submitted Successfully!")
         if (localStorage.getItem('userDetails')==null){
-            let details={
+            let details=[{
                 name:nameInp.value,
                 email:email.value
-            }
-            localStorage.setItem('userDetails',[JSON.stringify(details)])
+            }]
+            localStorage.setItem('userDetails',JSON.stringify(details))
             console.log(localStorage.getItem('userDetails'))
         }
         else{
-            let prev=localStorage.getItem('userDetails')
-            let array=[]
-            array.push(prev)            
+            let prev=JSON.parse(localStorage.getItem('userDetails'))            
             let details={
                 name:nameInp.value,
                 email:email.value
             }
-            array.push(JSON.stringify(details))
+            prev.push(details)
             localStorage.removeItem('userDetails')
-            localStorage.setItem('userDetails', array)
+            localStorage.setItem('userDetails', JSON.stringify(prev))
             console.log(localStorage.getItem('userDetails'))
+            
         }
-        // if (localStorage.getItem(userDetails)==null){
-        //     let userDetails={
-        //         name:nameInp.value,
-        //         email:email.value
-        //     }
-        //     localStorage.setItem('userDetails',JSON.stringify(userDetails))
-        // }
-        // else {
-        //     let arr=localStorage.getItem('userDetails')
-        //     let userDetails={
-        //         name:nameInp.value,
-        //         email:email.value
-        //     }
-        //     arr.push(JSON.stringify(userDetails))
-        //     localStorage.setItem('userDetails', arr)
-        // }
-        
+        location.reload()
     }
 }
