@@ -30,3 +30,19 @@ var li=document.getElementsByTagName('li')
 for (let i=0; i<li.length; i++){
     li[i].style.backgroundColor='grey'
 }
+
+let item2= document.querySelector('.list-group-item:nth-child(2)')
+item2.style.backgroundColor="green"
+let item3= document.querySelector('.list-group-item:nth-child(3)')
+item3.style.visibility="hidden"
+
+let allitems=document.querySelectorAll('.list-group-item')
+allitems[1].style.color="darkgreen"
+
+allitems=document.querySelectorAll('.list-group-item')
+for (let i=0; i<allitems.length; i++){
+    if (i%2!==0)
+        allitems[i].style.backgroundColor="green"
+}
+
+
