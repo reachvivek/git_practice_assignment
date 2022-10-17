@@ -1,48 +1,35 @@
-console.log(document.domain)
-console.log(document.URL)
-console.log(document.title)
-// document.title="123"
-console.log(document.doctype)
-console.log(document.head)
-console.log(document.body)
+//Traversing the DOM
+let itemlist=document.querySelector('#items')
+itemlist.parentNode.style.backgroundColor="#f4f4f4"
+//1
+itemlist.parentElement.style.backgroundColor="#gray"
+//2
+itemlist.lastElementChild.style.backgroundColor="green"
 
-//Get Element by ID
+itemlist.lastElementChild.textContent="Hello 4"
 
-var headerTitle=document.getElementById('header-title')
-// headerTitle.innerText="Hello"
-// headerTitle.textContent="GoodBye"
-headerTitle.style.borderBottom="solid 3px #000"
+let itemTitle=document.querySelector('.title')
+//3
+itemTitle.lastChild.textContent="Hello Title"
+//6
+itemTitle.firstChild.textContent="Add Items"
+//5
+itemlist.firstElementChild.style.backgroundColor="yellow"
+//11
+let newDiv=document.createElement('div')
+newDiv.className="hello"
+newDiv.id="hello1"
+//12
+newDiv.setAttribute('title', 'Hello Div')
+//13
+let newDivText=document.createTextNode('Hello World')
+//14
+newDiv.appendChild(newDivText)
 
-var addItem=document.querySelector('.title')
-addItem.style.fontWeight="900"
-addItem.style.color="green"
+let container=document.querySelector('header .container')
+let h1=document.querySelector('header h1')
 
-//Get Elements by Class Name
-var items=document.getElementsByClassName('list-group-item')
-console.log(items)
-items[2].style.backgroundColor="green"
-for (let i=0; i<items.length; i++){
-    items[i].style.fontWeight='bold'
-    items[i].style.color='white'
-}
-
-var li=document.getElementsByTagName('li')
-for (let i=0; i<li.length; i++){
-    li[i].style.backgroundColor='grey'
-}
-
-let item2= document.querySelector('.list-group-item:nth-child(2)')
-item2.style.backgroundColor="green"
-let item3= document.querySelector('.list-group-item:nth-child(3)')
-item3.style.visibility="hidden"
-
-let allitems=document.querySelectorAll('.list-group-item')
-allitems[1].style.color="darkgreen"
-
-allitems=document.querySelectorAll('.list-group-item')
-for (let i=0; i<allitems.length; i++){
-    if (i%2!==0)
-        allitems[i].style.backgroundColor="green"
-}
-
-
+console.log(container, h1)
+//1
+container.insertBefore(newDiv, h1)
+itemlist.insertBefore(newDiv, itemlist.firstElementChild)
