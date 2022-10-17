@@ -7,7 +7,9 @@ console.log(liItems)
 for (let i=0; i<4; i++){
     var li = document.createElement('li');
     li.className = 'list-group-item';
-    li.appendChild(document.createTextNode(`Item ${i+1}`));
+    li.appendChild(document.createTextNode(`Title ${i+1}`));
+    li.appendChild(document.createElement('br'))
+    li.appendChild(document.createTextNode(`Description ${i+1}`));
     var deleteBtn = document.createElement('button');
     var editBtn = document.createElement('button');
     deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
@@ -32,14 +34,17 @@ function addItem(e){
 
   // Get input value
   var newItem = document.getElementById('item').value;
+  var newItemDesc = document.getElementById('desc').value;
 
   // Create new li element
   var li = document.createElement('li');
+  var br = document.createElement('br');
   // Add class
   li.className = 'list-group-item';
   // Add text node with input value
-  li.appendChild(document.createTextNode(newItem));
-
+  li.appendChild(document.createTextNode(`${newItem}`));
+  li.appendChild(br)
+  li.appendChild(document.createTextNode(`${newItemDesc}`));
   // Create del button element
   var deleteBtn = document.createElement('button');
 
@@ -82,7 +87,8 @@ function filterItems(e){
   // Convert to an array
   Array.from(items).forEach(function(item){
     var itemName = item.firstChild.textContent;
-    if(itemName.toLowerCase().indexOf(text) != -1){
+    var itemDesc = item.firstChild.nextSibling.nextSibling.textContent;
+    if(itemName.toLowerCase().indexOf(text) != -1 || itemDesc.toLowerCase().indexOf(text) !=-1){
       item.style.display = 'block';
     } else {
       item.style.display = 'none';
