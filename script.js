@@ -41,18 +41,53 @@ function timeSince(date) {
 
 setInterval(getPosts, 1000) 
 
-function createPost(post, callback, time) {
-	setTimeout(()=>{
-		post.createdAt=new Date()
-		posts.push(post)
-		callback()
-	}, time);
+function createPost(post, time) {
+	return new Promise((resolve, reject)=>{
+		setTimeout(()=>{
+			post.createdAt=new Date()
+			posts.push(post)
+			
+			const error=false
+			if (!error){
+				resolve()
+			}
+			else{
+				reject
+			}
+
+		}, time);
+	})
 }
 
+let count=0
+function deletePost(){
+	return new Promise((resolve, reject)=>{
+		let myId=setInterval(()=>{
+			posts.pop()
+			const error=posts.length==0
+			if(!error){
+				resolve()
+			}
+			else{
+				count++
+				clearInterval(myId)
+				console.log("Array is empty now")
+				reject("Array is empty now")
+				if (count==1){
+					createPost({title: "Post 4", body:"This is Post 4", createdAt: ""}, 0).then(getPosts).then(deletePost).then(getPosts).catch(err=>console.log(err))
+				}
+			}
+		}, 1500)
+	})
+}
 
 let i=3;
 
-while (i<10){
-	createPost({title: "Post "+i, body:"This is Post "+i, createdAt: ""}, getPosts, i*3000)
+while (i<4){
+	createPost({title: "Post "+i, body:"This is Post "+i, createdAt: ""}, 0).then(getPosts)
 	i++
+}
+
+if (i==4){
+	deletePost().catch(err=>console.log(err)).then(getPosts)		
 }
