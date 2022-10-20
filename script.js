@@ -61,7 +61,34 @@ function deleteBooking(event){
 	axios({
 		method: 'delete',
 		url: `${url}/${event.target.id}`
-	}).then(res=>res.status==200?location.reload():console.log(res)).catch(err=>console.log(err))
+	}).then(result=>{
+		console.log(result)
+		if (result.status==200){
+			axios({
+				method: 'get',
+				url: url
+			}).then(res=>displayData(res)).catch(err=>console.log(err))
+	
+			function displayData(res=''){
+				if (res.data.length>0){
+					res.data.map(bookings=>{
+						let listItem=document.createElement('li')
+						listItem.innerHTML=(`${bookings.name} <span>${bookings.phone}</span> ${bookings.email} <button id=${bookings._id} class='del-btn'>x</button>`)
+						listGroup.innerHTML=""
+						listGroup.appendChild(listItem)
+					})
+					let delBtns=document.querySelectorAll('.del-btn')
+					for (let i=0; i<delBtns.length; i++){
+						delBtns[i].addEventListener('click', deleteBooking)
+					}
+				}
+				else{
+					listGroup.innerHTML=""
+					listGroup.appendChild(document.createTextNode('No Bookings Available!'))
+				}
+			}
+		}
+	}).catch(err=>console.log(err))
 }
 showBooking()
 
