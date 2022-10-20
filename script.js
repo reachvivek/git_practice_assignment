@@ -1,3 +1,11 @@
+const promise1=Promise.resolve("Hello World")
+const promise2=10
+const promise3=new Promise((resolve, reject)=>{
+	setTimeout(resolve, 2000, "Goodbye")
+})
+
+Promise.all([promise1, promise2, promise3]).then(values=>console.log(values))
+
 const posts=[
 	{title: "Post 1", body:"This is Post 1", createdAt: new Date(new Date().setTime(new Date().getTime()-5990000))},
 	{title: "Post 2", body:"This is Post 2", createdAt: new Date(new Date().setTime(new Date().getTime()-200000))}
@@ -42,7 +50,7 @@ function timeSince(date) {
 setInterval(getPosts, 1000) 
 
 function createPost(post, time) {
-	return new Promise((resolve, reject)=>{
+	let createPostPromise=new Promise((resolve, reject)=>{
 		setTimeout(()=>{
 			post.createdAt=new Date()
 			posts.push(post)
@@ -57,6 +65,10 @@ function createPost(post, time) {
 
 		}, time);
 	})
+	let updateLastUserActivityTime=new Promise((resolve,reject)=>{
+		setTimeout(resolve, 1000, console.log("Last Activity Time: "+new Date()))})
+	Promise.all([posts, new Date().getTime()]).then(values=>console.log(values))
+	return createPostPromise
 }
 
 let count=0
@@ -81,13 +93,35 @@ function deletePost(){
 	})
 }
 
-let i=3;
 
-while (i<4){
-	createPost({title: "Post "+i, body:"This is Post "+i, createdAt: ""}, 0).then(getPosts)
-	i++
-}
+setTimeout(()=>{
+	createPost({title: "Post 3", body:"This is Post 3", createdAt: ""}, 0).then(getPosts)
+}, 2000) 
 
-if (i==4){
-	deletePost().catch(err=>console.log(err)).then(getPosts)		
-}
+setTimeout(()=>{
+	createPost({title: "Post 4", body:"This is Post 4", createdAt: ""}, 0).then(getPosts)
+}, 4000) 
+
+setTimeout(()=>{
+	let deleteLastPost=new Promise((resolve, reject)=>{
+		posts.pop()
+		const error=posts.length==0
+		if(!error){
+			resolve()
+		}
+		else{
+			console.log("Array is empty now")
+		}
+	})
+	Promise.all([posts, getPosts]).then(values=>console.log(values))
+
+}, 6000) 
+
+
+
+
+
+// if (i==4){
+// 	deletePost().catch(err=>console.log(err)).then(getPosts)		
+// }
+
