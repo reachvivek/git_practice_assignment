@@ -1,5 +1,5 @@
 //Global Variables
-var url='https://crudcrud.com/api/54c028ad1e8c4d279db482b69021cb08/appointmentData'
+var url='https://crudcrud.com/api/a40f591970484ade95b5925868d4073e/appointmentData'
 
 // Input Variables
 let nameInp=document.querySelector('#name')
@@ -27,11 +27,13 @@ function showBooking(res="") {
 		if (res.data.length>0){
 			res.data.map(bookings=>{
 				let listItem=document.createElement('li')
-				listItem.innerHTML=(`${bookings.name} <span>${bookings.phone}</span> ${bookings.email} <button id=${bookings._id} class='del-btn'>x</button>`)
+				listItem.innerHTML=(`${bookings.name} <span>${bookings.phone}</span> ${bookings.email} <button id=${bookings._id} class='edit-btn'>Edit</button><button id=${bookings._id} class='del-btn'>x</button>`)
 				listGroup.appendChild(listItem)
 			})
 			let delBtns=document.querySelectorAll('.del-btn')
+			let editBtns=document.querySelectorAll('.edit-btn')
 			for (let i=0; i<delBtns.length; i++){
+				editBtns[i].addEventListener('click', editBooking)
 				delBtns[i].addEventListener('click', deleteBooking)
 			}
 		}
@@ -56,6 +58,38 @@ function createBooking(e) {
 	}).then(res=>res.status==201?location.reload():console.log(res)).catch(err=>console.log(err))
 }
 
+// Edit Booking
+function editBooking(e){
+	let id=e.target.id
+	axios({
+		method: 'get',
+		url: `${url}/${e.target.id}`
+	}).then(res=>{
+		nameInp.value=res.data.name
+		emailInp.value=res.data.email
+		phoneInp.value=res.data.phone
+		submit.removeEventListener('click', createBooking)
+		submit.addEventListener('click', editEntry)
+		submit.value="Modify"
+	}).catch(err=>console.log(err))
+
+	function editEntry(event){
+		event.preventDefault()
+		let name=nameInp.value, email=emailInp.value, phone=phoneInp.value
+		axios({
+			method: 'put',
+			url: `${url}/${id}`,
+			data: {
+				name: name,
+				phone: phone,
+				email: email
+			}
+		}).then(res=>res.status==200?location.reload():console.log(res)).catch(err=>console.log(err))
+	}
+}
+
+
+// Delete Booking
 function deleteBooking(event){
 	console.log(event.target.id)
 	axios({
